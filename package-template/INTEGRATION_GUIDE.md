@@ -1,6 +1,6 @@
 # 🔧 Integration Guide - React Native Scaling Drawer
 
-This guide shows you how to integrate the React Native Scaling Drawer into your existing Expo Router or React Navigation project.
+This guide shows you how to integrate the React Native Scaling Drawer into your modern Expo Router project.
 
 ## 📦 Installation
 
@@ -12,12 +12,12 @@ yarn add react-native-scaling-drawer
 
 ### Dependencies
 
-Make sure you have these peer dependencies installed:
+Make sure you have these dependencies installed (usually included with Expo):
 
 ```bash
-npm install react-native-reanimated react-native-gesture-handler
+npm install react-native-reanimated react-native-gesture-handler expo expo-router
 # or
-yarn add react-native-reanimated react-native-gesture-handler
+yarn add react-native-reanimated react-native-gesture-handler expo expo-router
 ```
 
 ## 🎯 Expo Router Integration
@@ -77,43 +77,6 @@ export default function HomeScreen() {
       </TouchableOpacity>
       {/* Your screen content */}
     </View>
-  );
-}
-```
-
-## 🧭 React Navigation Integration
-
-### Step 1: Use the React Navigation adapter
-
-```tsx
-// App.tsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { ReactNavigationDrawer } from 'react-native-scaling-drawer';
-
-const Stack = createStackNavigator();
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <ReactNavigationDrawer
-        menuItems={[
-          { label: 'Home', screenName: 'Home' },
-          { label: 'Profile', screenName: 'Profile' },
-          { label: 'Settings', screenName: 'Settings' },
-        ]}
-        onNavigate={(screenName) => {
-          // Handle navigation
-        }}
-        drawerBackgroundColor="#673AB7"
-      >
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-        </Stack.Navigator>
-      </ReactNavigationDrawer>
-    </NavigationContainer>
   );
 }
 ```
@@ -323,16 +286,6 @@ const { width } = Dimensions.get('window');
 ```
 
 ## 🔄 Migration from Other Drawers
-
-### From React Navigation Drawer
-
-```tsx
-// Before (React Navigation Drawer)
-import { createDrawerNavigator } from '@react-navigation/drawer';
-
-// After (Scaling Drawer)
-import { ReactNavigationDrawer } from 'react-native-scaling-drawer';
-```
 
 ### From Expo Router Drawer
 

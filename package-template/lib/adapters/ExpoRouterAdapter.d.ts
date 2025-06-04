@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { ScalingDrawerConfig } from '../hooks/useScalingDrawer';
-export interface ExpoDrawerMenuItem {
+export interface DrawerMenuItem {
     /** Display name for the menu item */
     label: string;
     /** Expo Router href (e.g., '/home', '/profile', '/(tabs)/settings') */
@@ -12,7 +12,7 @@ export interface ExpoDrawerMenuItem {
 }
 export interface ExpoRouterDrawerProps extends ScalingDrawerConfig {
     /** Array of menu items with Expo Router hrefs */
-    menuItems: ExpoDrawerMenuItem[];
+    menuItems: DrawerMenuItem[];
     /** Function to handle navigation (usually router.push) */
     onNavigate: (href: string) => void;
     /** Main content (usually your Slot or Stack) */
@@ -29,23 +29,23 @@ export interface ExpoRouterDrawerProps extends ScalingDrawerConfig {
     menuItemTextStyle?: any;
 }
 /**
- * Header component that can be used with Expo Router
+ * Menu button component for Expo Router headers
  * Provides a burger menu button that opens the drawer
  */
-export declare const ExpoDrawerMenuButton: React.FC<{
+export declare const DrawerMenuButton: React.FC<{
     style?: any;
     iconColor?: string;
 }>;
 /**
- * Expo Router Drawer Adapter
+ * Modern Expo Router Drawer Component
  *
- * Provides seamless integration with Expo Router
+ * Provides seamless integration with Expo Router for modern React Native apps
  *
  * @example
  * ```tsx
  * // app/_layout.tsx
  * import { Stack } from 'expo-router';
- * import { ExpoRouterDrawer, ExpoDrawerMenuButton } from 'react-native-scaling-drawer';
+ * import { ExpoRouterDrawer, DrawerMenuButton } from 'react-native-scaling-drawer';
  * import { useRouter } from 'expo-router';
  *
  * export default function RootLayout() {
@@ -56,18 +56,17 @@ export declare const ExpoDrawerMenuButton: React.FC<{
  *       menuItems={[
  *         { label: 'Home', href: '/' },
  *         { label: 'Profile', href: '/profile' },
- *         { label: 'Settings', href: '/(tabs)/settings' },
+ *         { label: 'Settings', href: '/settings' },
  *       ]}
  *       onNavigate={(href) => router.push(href)}
+ *       drawerBackgroundColor="#673AB7"
+ *       slideDistance={280}
+ *       scaleFactor={0.85}
  *     >
- *       <Stack
- *         screenOptions={{
- *           headerLeft: () => <ExpoDrawerMenuButton />,
- *         }}
- *       >
+ *       <Stack>
  *         <Stack.Screen name="index" options={{ title: 'Home' }} />
  *         <Stack.Screen name="profile" options={{ title: 'Profile' }} />
- *         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+ *         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
  *       </Stack>
  *     </ExpoRouterDrawer>
  *   );

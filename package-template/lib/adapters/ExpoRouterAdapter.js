@@ -3,18 +3,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExpoRouterDrawer = exports.ExpoDrawerMenuButton = void 0;
+exports.ExpoRouterDrawer = exports.DrawerMenuButton = void 0;
 const react_1 = __importDefault(require("react"));
 const react_native_1 = require("react-native");
 const ScalingDrawer_1 = require("../components/ScalingDrawer");
 const DrawerContext_1 = require("../context/DrawerContext");
-const DrawerContext_2 = require("../context/DrawerContext");
 /**
- * Header component that can be used with Expo Router
+ * Menu button component for Expo Router headers
  * Provides a burger menu button that opens the drawer
  */
-const ExpoDrawerMenuButton = ({ style, iconColor = '#000' }) => {
-    const { openDrawer } = (0, DrawerContext_2.useDrawerContext)();
+const DrawerMenuButton = ({ style, iconColor = '#000' }) => {
+    const { openDrawer } = (0, DrawerContext_1.useDrawerContext)();
     return (<react_native_1.TouchableOpacity style={[styles.menuButton, style]} onPress={openDrawer}>
       <react_native_1.View style={styles.burgerIcon}>
         <react_native_1.View style={[styles.burgerLine, { backgroundColor: iconColor }]}/>
@@ -23,12 +22,12 @@ const ExpoDrawerMenuButton = ({ style, iconColor = '#000' }) => {
       </react_native_1.View>
     </react_native_1.TouchableOpacity>);
 };
-exports.ExpoDrawerMenuButton = ExpoDrawerMenuButton;
+exports.DrawerMenuButton = DrawerMenuButton;
 /**
  * Default drawer content component for Expo Router
  */
-const DefaultExpoDrawerContent = ({ menuItems, onNavigate, header, footer, menuItemStyle, menuItemTextStyle }) => {
-    const { closeDrawer } = (0, DrawerContext_2.useDrawerContext)();
+const DefaultDrawerContent = ({ menuItems, onNavigate, header, footer, menuItemStyle, menuItemTextStyle }) => {
+    const { closeDrawer } = (0, DrawerContext_1.useDrawerContext)();
     const handleNavigation = (href) => {
         onNavigate(href);
         closeDrawer();
@@ -49,15 +48,15 @@ const DefaultExpoDrawerContent = ({ menuItems, onNavigate, header, footer, menuI
     </react_native_1.View>);
 };
 /**
- * Expo Router Drawer Adapter
+ * Modern Expo Router Drawer Component
  *
- * Provides seamless integration with Expo Router
+ * Provides seamless integration with Expo Router for modern React Native apps
  *
  * @example
  * ```tsx
  * // app/_layout.tsx
  * import { Stack } from 'expo-router';
- * import { ExpoRouterDrawer, ExpoDrawerMenuButton } from 'react-native-scaling-drawer';
+ * import { ExpoRouterDrawer, DrawerMenuButton } from 'react-native-scaling-drawer';
  * import { useRouter } from 'expo-router';
  *
  * export default function RootLayout() {
@@ -68,18 +67,17 @@ const DefaultExpoDrawerContent = ({ menuItems, onNavigate, header, footer, menuI
  *       menuItems={[
  *         { label: 'Home', href: '/' },
  *         { label: 'Profile', href: '/profile' },
- *         { label: 'Settings', href: '/(tabs)/settings' },
+ *         { label: 'Settings', href: '/settings' },
  *       ]}
  *       onNavigate={(href) => router.push(href)}
+ *       drawerBackgroundColor="#673AB7"
+ *       slideDistance={280}
+ *       scaleFactor={0.85}
  *     >
- *       <Stack
- *         screenOptions={{
- *           headerLeft: () => <ExpoDrawerMenuButton />,
- *         }}
- *       >
+ *       <Stack>
  *         <Stack.Screen name="index" options={{ title: 'Home' }} />
  *         <Stack.Screen name="profile" options={{ title: 'Profile' }} />
- *         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+ *         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
  *       </Stack>
  *     </ExpoRouterDrawer>
  *   );
@@ -87,7 +85,7 @@ const DefaultExpoDrawerContent = ({ menuItems, onNavigate, header, footer, menuI
  * ```
  */
 const ExpoRouterDrawer = ({ menuItems, onNavigate, children, drawerBackgroundColor = '#FF0000', drawerHeader, drawerFooter, menuItemStyle, menuItemTextStyle, ...drawerConfig }) => {
-    const drawerContent = (<DefaultExpoDrawerContent menuItems={menuItems} onNavigate={onNavigate} header={drawerHeader} footer={drawerFooter} menuItemStyle={menuItemStyle} menuItemTextStyle={menuItemTextStyle}/>);
+    const drawerContent = (<DefaultDrawerContent menuItems={menuItems} onNavigate={onNavigate} header={drawerHeader} footer={drawerFooter} menuItemStyle={menuItemStyle} menuItemTextStyle={menuItemTextStyle}/>);
     return (<DrawerContext_1.DrawerProvider {...drawerConfig}>
       <ScalingDrawer_1.ScalingDrawer drawerContent={drawerContent} drawerBackgroundColor={drawerBackgroundColor}>
         {children}

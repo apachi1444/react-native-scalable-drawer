@@ -4,29 +4,29 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-A beautiful, performant drawer navigation component with **scaling animations** and **shadow effects** for React Native. The main content scales down and slides to reveal the drawer underneath, creating a stunning visual effect.
+A beautiful, performant drawer navigation component with **scaling animations** and **shadow effects** for modern **Expo Router** applications. The main content scales down and slides to reveal the drawer underneath, creating a stunning visual effect.
 
-**🚀 Universal Navigation Support**: Works seamlessly with both **React Navigation** and **Expo Router**!
+**🚀 Built for the Future**: Designed specifically for modern Expo Router apps with TypeScript-first development!
 
 ## ✨ Features
 
 - 🎯 **Beautiful Scaling Animation** - Main content scales and slides smoothly
 - 🌟 **Layered Shadow Effects** - Multiple shadow layers for depth and realism
-- ⚡ **High Performance** - Uses native driver for 60fps animations
+- ⚡ **High Performance** - Uses React Native Reanimated 3 for 60fps animations
+- 🚀 **Expo Router First** - Built specifically for modern Expo Router apps
 - 🎨 **Fully Customizable** - Colors, animations, dimensions, and more
 - 📱 **Cross Platform** - Works on both iOS and Android
-- 🔧 **TypeScript Support** - Full type safety and IntelliSense
-- 🪶 **Lightweight** - Zero external dependencies
-- 🎮 **Easy Integration** - Drop-in replacement for standard drawers
-- 🧭 **Universal Navigation** - Supports React Navigation & Expo Router
-- 📦 **Multiple Integration Options** - Choose the approach that fits your project
+- 🔧 **TypeScript Ready** - Full type safety and IntelliSense support
+- 🪶 **Modern Architecture** - Clean, maintainable code structure
+- 🎮 **Gesture Support** - Smooth touch interactions and gestures
+- 📦 **Easy Integration** - Simple setup with Expo Router
 
 ## 📱 Demo
 
 > Add GIF or video demo here showing the scaling effect
 
 ## 🚀 Installation
-
+ 
 ```bash
 npm install react-native-scaling-drawer
 ```
@@ -39,14 +39,12 @@ yarn add react-native-scaling-drawer
 
 ## 📖 Quick Start
 
-Choose the integration method that fits your project:
-
-### 🧭 Option 1: Expo Router (Recommended for new projects)
+### 🚀 Expo Router Integration
 
 ```tsx
 // app/_layout.tsx
 import { Stack, useRouter } from 'expo-router';
-import { ExpoRouterDrawer, ExpoDrawerMenuButton } from 'react-native-scaling-drawer';
+import { ExpoRouterDrawer, DrawerMenuButton } from 'react-native-scaling-drawer';
 
 export default function RootLayout() {
   const router = useRouter();
@@ -56,67 +54,39 @@ export default function RootLayout() {
       menuItems={[
         { label: 'Home', href: '/' },
         { label: 'Profile', href: '/profile' },
-        { label: 'Settings', href: '/(tabs)/settings' },
+        { label: 'Settings', href: '/settings' },
       ]}
       onNavigate={(href) => router.push(href)}
-      drawerBackgroundColor="#2196F3"
+      drawerBackgroundColor="#673AB7"
+      slideDistance={280}
+      scaleFactor={0.85}
     >
-      <Stack
-        screenOptions={{
-          headerLeft: () => <ExpoDrawerMenuButton iconColor="#fff" />,
-        }}
-      >
+      <Stack>
         <Stack.Screen name="index" options={{ title: 'Home' }} />
         <Stack.Screen name="profile" options={{ title: 'Profile' }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="settings" options={{ title: 'Settings' }} />
       </Stack>
     </ExpoRouterDrawer>
   );
 }
 ```
 
-### 🧭 Option 2: React Navigation
-
-```tsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { ReactNavigationDrawer, DrawerMenuButton } from 'react-native-scaling-drawer';
-
-const Stack = createStackNavigator();
-
-const App = () => (
-  <NavigationContainer>
-    <ReactNavigationDrawer
-      menuItems={[
-        { label: 'Home', screenName: 'Home' },
-        { label: 'Profile', screenName: 'Profile' },
-      ]}
-      onNavigate={(screenName) => navigation.navigate(screenName)}
-      drawerBackgroundColor="#2196F3"
-    >
-      <Stack.Navigator
-        screenOptions={{
-          headerLeft: () => <DrawerMenuButton iconColor="#fff" />,
-        }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-      </Stack.Navigator>
-    </ReactNavigationDrawer>
-  </NavigationContainer>
-);
-```
-
-### 🎨 Option 3: Custom Implementation
+### 🎨 Custom Implementation
 
 ```tsx
 import { ScalingDrawer, DrawerProvider } from 'react-native-scaling-drawer';
 
 const App = () => (
-  <DrawerProvider>
+  <DrawerProvider
+    slideDistance={280}
+    scaleFactor={0.85}
+    animationDuration={250}
+  >
     <ScalingDrawer
       drawerContent={<MyCustomDrawerContent />}
-      drawerBackgroundColor="#2196F3"
+      drawerBackgroundColor="#673AB7"
+      showShadow={true}
+      borderRadius={25}
     >
       <MyMainContent />
     </ScalingDrawer>
@@ -204,24 +174,21 @@ const MyComponent = () => {
 
 ## 🔧 Advanced Usage
 
-### With React Navigation
+### Using the Drawer Context
 
 ```tsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { useDrawerContext } from 'react-native-scaling-drawer';
 
-const Stack = createStackNavigator();
+function MyComponent() {
+  const { openDrawer, closeDrawer, toggleDrawer, isOpen } = useDrawerContext();
 
-const App = () => (
-  <NavigationContainer>
-    <ScalingDrawer drawerContent={<MyDrawerContent />}>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-      </Stack.Navigator>
-    </ScalingDrawer>
-  </NavigationContainer>
-);
+  return (
+    <View>
+      <Text>Drawer is {isOpen ? 'open' : 'closed'}</Text>
+      <Button title="Toggle Drawer" onPress={toggleDrawer} />
+    </View>
+  );
+}
 ```
 
 ## 🎯 Performance Tips
