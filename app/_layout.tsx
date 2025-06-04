@@ -7,79 +7,94 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '../hooks/useColorScheme';
 // Using the new flexible package approach
-import ScalingDrawer, { DrawerProvider, useDrawer } from '../package-template/src';
+import { DrawerProvider, ScalingDrawer, useDrawer } from '../package-template/src';
 
-// Flexible menu button - can be used anywhere!
-function FlexibleMenuButton() {
-  const { toggle, isOpen } = useDrawer();
-
-  return (
-    <TouchableOpacity
-      style={{ padding: 10, marginLeft: 5 }}
-      onPress={toggle}
-    >
-      <Text style={{ fontSize: 20, color: '#fff' }}>
-        {isOpen ? '✕' : '☰'}
-      </Text>
-    </TouchableOpacity>
-  );
-}
-
-// Custom drawer content - complete control!
-function CustomDrawerContent() {
-  const { close } = useDrawer();
-  const router = useRouter();
-
-  const navigate = (href: string) => {
-    router.push(href);
-    close();
-  };
-
-  return (
-    <View style={{ flex: 1, backgroundColor: '#673AB7', paddingTop: 60 }}>
-      {/* Header */}
-      <View style={styles.drawerHeader}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>JD</Text>
-        </View>
-        <Text style={styles.userName}>John Doe</Text>
-        <Text style={styles.userEmail}>john@example.com</Text>
-      </View>
-
-      {/* Menu Items */}
-      <View style={{ flex: 1, padding: 20 }}>
-        {[
-          { label: 'Home', href: '/(tabs)', icon: '🏠' },
-          { label: 'Explore', href: '/(tabs)/explore', icon: '🔍' },
-          { label: 'Profile', href: '/profile', icon: '👤' },
-          { label: 'Settings', href: '/settings', icon: '⚙️' },
-          { label: 'Test Drawer', href: '/test-drawer', icon: '🧪' },
-        ].map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.menuItem}
-            onPress={() => navigate(item.href)}
-          >
-            <Text style={styles.menuIcon}>{item.icon}</Text>
-            <Text style={styles.menuLabel}>{item.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Footer */}
-      <View style={styles.drawerFooter}>
-        <Text style={styles.footerText}>Built with Flexible Drawer</Text>
-        <Text style={styles.versionText}>v1.0.0</Text>
-      </View>
-    </View>
-  );
-}
-
-
-
-export default function RootLayout() {
+// App content that uses the drawer - must be inside provider
+function AppContent() {
   const colorScheme = useColorScheme();
 
+  // Custom drawer content - complete control!
+  function CustomDrawerContent() {
+    const { close } = useDrawer();
+    const router = useRouter();
+
+    const navigate = (href: any) => {
+      router.push(href);
+      close();
+    };
+
+    return (
+      <View style={{ flex: 1, backgroundColor: '#673AB7', paddingTop: 60 }}>
+        {/* Header */}
+        <View style={styles.drawerHeader}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>JD</Text>
+          </View>
+          <Text style={styles.userName}>John Doe</Text>
+          <Text style={styles.userEmail}>john@example.com</Text>
+        </View>
+
+        {/* Menu Items */}
+        <View style={{ flex: 1, padding: 20 }}>
+          {[
+            { label: 'Home', href: '/(tabs)', icon: '🏠' },
+            { label: 'Explore', href: '/(tabs)/explore', icon: '🔍' },
+            { label: 'Profile', href: '/profile', icon: '👤' },
+            { label: 'Settings', href: '/settings', icon: '⚙️' },
+            { label: 'Test Drawer', href: '/test-drawer', icon: '🧪' },
+          ].map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.menuItem}
+              onPress={() => navigate(item.href)}
+            >
+              <Text style={styles.menuIcon}>{item.icon}</Text>
+              <Text style={styles.menuLabel}>{item.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Footer */}
+        <View style={styles.drawerFooter}>
+          <Text style={styles.footerText}>Built with Flexible Drawer</Text>
+          <Text style={styles.versionText}>v1.0.0</Text>
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ScalingDrawer
+        drawerContent={<CustomDrawerContent />}
+        drawerBackgroundColor="#673AB7"
+        showShadow={true}
+        borderRadius={25}
+      >
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#673AB7',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="profile" options={{ headerShown: false }} />
+          <Stack.Screen name="settings" options={{ headerShown : false }} />
+          <Stack.Screen name="test-drawer" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ScalingDrawer>
+      <StatusBar style="light" />
+    </ThemeProvider>
+  );
+}
+
+export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -90,42 +105,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      {/* Using the new flexible approach - complete control! */}
-      <DrawerProvider
-        slideDistance={300}
-        scaleFactor={0.8}
-        animationDuration={250}
-      >
-        <ScalingDrawer
-          drawerContent={<CustomDrawerContent />}
-          drawerBackgroundColor="#673AB7"
-          showShadow={true}
-          borderRadius={25}
-        >
-          <Stack
-            screenOptions={{
-              headerStyle: {
-                backgroundColor: '#673AB7',
-              },
-              headerTintColor: '#fff',
-              headerTitleStyle: {
-                fontWeight: 'bold',
-              },
-              // Using our flexible menu button!
-              headerLeft: () => <FlexibleMenuButton />,
-            }}
-          >
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="profile" options={{ title: 'Profile' }} />
-            <Stack.Screen name="settings" options={{ title: 'Settings' }} />
-            <Stack.Screen name="test-drawer" options={{ title: 'Test Drawer' }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ScalingDrawer>
-      </DrawerProvider>
-      <StatusBar style="light" />
-    </ThemeProvider>
+    <DrawerProvider
+      slideDistance={300}
+      scaleFactor={0.8}
+      animationDuration={250}
+    >
+      <AppContent />
+    </DrawerProvider>
   );
 }
 

@@ -67,7 +67,6 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
     slideAnim,
     scaleAnim,
     shadowOpacityAnim,
-    openDrawer,
     closeDrawer,
   } = useDrawerContext();
 

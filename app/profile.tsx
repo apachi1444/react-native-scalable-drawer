@@ -1,10 +1,24 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDrawer } from '../package-template/src';
 
 export default function ProfileScreen() {
+  const { toggle, isOpen } = useDrawer();
+
   return (
     <SafeAreaView style={styles.container}>
+      {/* Custom header with menu button */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={toggle}
+        >
+          <Text style={styles.menuIcon}>{isOpen ? '✕' : '☰'}</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Profile</Text>
+      </View>
+
       <ScrollView contentContainerStyle={styles.content}>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
@@ -81,6 +95,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#673AB7',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  menuButton: {
+    padding: 8,
+    marginRight: 15,
+  },
+  menuIcon: {
+    fontSize: 20,
+    color: '#fff',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
   },
   content: {
     padding: 20,

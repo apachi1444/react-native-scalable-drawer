@@ -9,8 +9,19 @@ export default function TestDrawerScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Custom header with menu button */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={toggle}
+        >
+          <Text style={styles.menuIcon}>{isOpen ? '✕' : '☰'}</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>🎨 Flexible Drawer Test</Text>
+      </View>
+
       <View style={styles.content}>
-        <Text style={styles.title}>🎨 Flexible Scaling Drawer Test</Text>
+        <Text style={styles.title}>Test All Drawer Controls</Text>
         
         <View style={styles.statusContainer}>
           <Text style={styles.statusLabel}>Drawer Status:</Text>
@@ -77,6 +88,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#673AB7',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  menuButton: {
+    padding: 8,
+    marginRight: 15,
+  },
+  menuIcon: {
+    fontSize: 20,
+    color: '#fff',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
   },
   content: {
     flex: 1,
