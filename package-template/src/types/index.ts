@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ViewStyle, Animated } from 'react-native';
+import { Animated, ViewStyle } from 'react-native';
 
 /**
  * Configuration options for the scaling drawer
@@ -59,6 +59,10 @@ export interface ScalingDrawerProps extends ScalingDrawerConfig {
   onDrawerClose?: () => void;
   /** Whether to close drawer when main content is pressed (default: true) */
   closeOnContentPress?: boolean;
+  /** Whether to enable swipe gesture to open drawer (default: true) */
+  enableSwipeGesture?: boolean;
+  /** Minimum swipe distance to trigger drawer opening (default: 50) */
+  swipeThreshold?: number;
 }
 
 /**

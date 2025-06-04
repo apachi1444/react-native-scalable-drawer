@@ -53,16 +53,19 @@ export default function TestDrawerScreen() {
             2. Use the buttons below to control the drawer programmatically
           </Text>
           <Text style={styles.infoText}>
-            3. Watch the main content scale down and slide to the right
+            3. 🆕 SWIPE from the left edge of the screen to open the drawer!
           </Text>
           <Text style={styles.infoText}>
-            4. Notice the beautiful shadow effects behind the scaled content
+            4. Watch the main content scale down and slide to the right
           </Text>
           <Text style={styles.infoText}>
-            5. Tap anywhere on the scaled content to close the drawer
+            5. Notice the beautiful shadow effects behind the scaled content
           </Text>
           <Text style={styles.infoText}>
-            6. Try navigating to different screens from the custom drawer menu
+            6. Tap anywhere on the scaled content to close the drawer
+          </Text>
+          <Text style={styles.infoText}>
+            7. Try navigating to different screens from the custom drawer menu
           </Text>
         </View>
 
@@ -78,6 +81,9 @@ export default function TestDrawerScreen() {
           <Text style={styles.featureItem}>✅ No forced header structure</Text>
           <Text style={styles.featureItem}>✅ Programmatic control from anywhere</Text>
           <Text style={styles.featureItem}>✅ Touch-to-close functionality</Text>
+          <Text style={styles.featureItem}>🆕 Swipe gesture to open drawer</Text>
+          <Text style={styles.featureItem}>🆕 Configurable swipe threshold</Text>
+          <Text style={styles.featureItem}>🆕 Enable/disable swipe gesture</Text>
         </View>
       </View>
     </SafeAreaView>

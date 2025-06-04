@@ -1,11 +1,13 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useRef } from 'react';
 import {
-    Animated,
-    StyleSheet,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
-    ViewStyle
+  Animated,
+  Dimensions,
+  PanResponder,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+  ViewStyle
 } from 'react-native';
 import { useDrawerContext } from '../context/DrawerContext';
 
@@ -30,6 +32,10 @@ export interface ScalingDrawerProps {
   closeOnContentPress?: boolean;
   /** Border radius for scaled content (default: 20) */
   borderRadius?: number;
+  /** Whether to enable swipe gesture to open drawer (default: true) */
+  enableSwipeGesture?: boolean;
+  /** Minimum swipe distance to trigger drawer opening (default: 50) */
+  swipeThreshold?: number;
 }
 
 /**
@@ -61,6 +67,8 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
   onDrawerClose,
   closeOnContentPress = true,
   borderRadius = 20,
+  enableSwipeGesture = true,
+  swipeThreshold = 50,
 }) => {
   const {
     isOpen,
@@ -68,7 +76,11 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
     scaleAnim,
     shadowOpacityAnim,
     closeDrawer,
+    openDrawer,
   } = useDrawerContext();
+
+  // Get screen width for swipe calculations
+  const screenWidth = Dimensions.get('window').width;
 
   const handleCloseDrawer = () => {
     closeDrawer();
@@ -80,6 +92,57 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
       handleCloseDrawer();
     }
   };
+
+  // Create PanResponder for swipe gesture
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        // Only respond to swipe gestures if enabled and drawer is closed
+        if (!enableSwipeGesture || isOpen) return false;
+
+        // Check if it's a horizontal swipe from the left edge
+        const { dx, dy } = gestureState;
+        const isHorizontalSwipe = Math.abs(dx) > Math.abs(dy);
+        const isFromLeftEdge = evt.nativeEvent.pageX < 50; // 50px from left edge
+        const isRightwardSwipe = dx > 0;
+
+        return isHorizontalSwipe && isFromLeftEdge && isRightwardSwipe;
+      },
+
+      onPanResponderGrant: () => {
+        // Gesture started
+      },
+
+      onPanResponderMove: (evt, gestureState) => {
+        // Track the swipe movement
+        const { dx } = gestureState;
+
+        // Only allow rightward movement when drawer is closed
+        if (!isOpen && dx > 0) {
+          // Optional: You could add real-time preview here
+          // For now, we'll just wait for the gesture to complete
+        }
+      },
+
+      onPanResponderRelease: (evt, gestureState) => {
+        const { dx, vx } = gestureState;
+
+        // Check if swipe meets threshold for opening
+        const swipeDistance = dx;
+        const swipeVelocity = vx;
+
+        // Open drawer if swipe distance or velocity is sufficient
+        if (swipeDistance > swipeThreshold || swipeVelocity > 0.5) {
+          openDrawer();
+          onDrawerOpen?.();
+        }
+      },
+
+      onPanResponderTerminate: () => {
+        // Gesture was interrupted
+      },
+    })
+  ).current;
 
   return (
     <View style={styles.container}>
@@ -122,6 +185,7 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
             ],
           },
         ]}
+        {...(enableSwipeGesture ? panResponder.panHandlers : {})}
       >
         <TouchableWithoutFeedback onPress={handleContentPress}>
           <View

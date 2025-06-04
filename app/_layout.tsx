@@ -70,6 +70,8 @@ function AppContent() {
         drawerBackgroundColor="#673AB7"
         showShadow={true}
         borderRadius={25}
+        enableSwipeGesture={true}
+        swipeThreshold={50}
       >
         <Stack
           screenOptions={{
