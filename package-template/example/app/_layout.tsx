@@ -2,7 +2,21 @@ import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { DrawerProvider, ScalingDrawer } from 'react-native-scaling-drawer';
+import { DrawerProvider, ScalingDrawer, useDrawerContext } from 'react-native-scaling-drawer';
+
+// Menu button component for headers
+function MenuButton() {
+  const { openDrawer } = useDrawerContext();
+
+  return (
+    <TouchableOpacity
+      style={{ padding: 10, marginLeft: 5 }}
+      onPress={openDrawer}
+    >
+      <Text style={{ fontSize: 20, color: '#fff' }}>☰</Text>
+    </TouchableOpacity>
+  );
+}
 
 // Custom drawer content component
 function DrawerContent() {
@@ -74,6 +88,7 @@ export default function RootLayout() {
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
+              headerLeft: () => <MenuButton />,
             }}
           >
             <Stack.Screen
