@@ -84,10 +84,14 @@ const DefaultDrawerContent = ({ menuItems, onNavigate, header, footer, menuItemS
  * }
  * ```
  */
-const ExpoRouterDrawer = ({ menuItems, onNavigate, children, drawerBackgroundColor = '#FF0000', drawerHeader, drawerFooter, menuItemStyle, menuItemTextStyle, ...drawerConfig }) => {
-    const drawerContent = (<DefaultDrawerContent menuItems={menuItems} onNavigate={onNavigate} header={drawerHeader} footer={drawerFooter} menuItemStyle={menuItemStyle} menuItemTextStyle={menuItemTextStyle}/>);
+const ExpoRouterDrawer = ({ menuItems, onNavigate, children, drawerContent: customDrawerContent, drawerBackgroundColor = '#FF0000', drawerHeader, drawerFooter, menuItemStyle, menuItemTextStyle, ...drawerConfig }) => {
+    // Use custom drawer content if provided, otherwise use default with menu items
+    const finalDrawerContent = customDrawerContent || (menuItems && onNavigate ? (<DefaultDrawerContent menuItems={menuItems} onNavigate={onNavigate} header={drawerHeader} footer={drawerFooter} menuItemStyle={menuItemStyle} menuItemTextStyle={menuItemTextStyle}/>) : null);
+    if (!finalDrawerContent) {
+        throw new Error('ExpoRouterDrawer: Either provide drawerContent or both menuItems and onNavigate');
+    }
     return (<DrawerContext_1.DrawerProvider {...drawerConfig}>
-      <ScalingDrawer_1.ScalingDrawer drawerContent={drawerContent} drawerBackgroundColor={drawerBackgroundColor}>
+      <ScalingDrawer_1.ScalingDrawer drawerContent={finalDrawerContent} drawerBackgroundColor={drawerBackgroundColor}>
         {children}
       </ScalingDrawer_1.ScalingDrawer>
     </DrawerContext_1.DrawerProvider>);

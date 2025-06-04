@@ -9,6 +9,7 @@
  */
 export { ScalingDrawer } from './components/ScalingDrawer';
 export { DrawerProvider, useDrawerContext } from './context/DrawerContext';
+export { useDrawer } from './hooks/useDrawer';
 export { useScalingDrawer } from './hooks/useScalingDrawer';
 export { DrawerMenuButton, ExpoRouterDrawer } from './adapters/ExpoRouterAdapter';
 export type { DrawerMenuItem, ExpoRouterDrawerProps } from './adapters/ExpoRouterAdapter';

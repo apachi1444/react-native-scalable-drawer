@@ -2,16 +2,16 @@ import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { DrawerProvider, ScalingDrawer, useDrawerContext } from 'react-native-scaling-drawer';
+import { DrawerProvider, ScalingDrawer, useDrawer } from 'react-native-scaling-drawer';
 
-// Menu button component for headers
+// Menu button component for headers - shows how flexible the drawer control is
 function MenuButton() {
-  const { openDrawer } = useDrawerContext();
+  const { open } = useDrawer();
 
   return (
     <TouchableOpacity
       style={{ padding: 10, marginLeft: 5 }}
-      onPress={openDrawer}
+      onPress={open}
     >
       <Text style={{ fontSize: 20, color: '#fff' }}>☰</Text>
     </TouchableOpacity>

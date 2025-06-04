@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = exports.ExpoRouterDrawer = exports.DrawerMenuButton = exports.useScalingDrawer = exports.useDrawerContext = exports.DrawerProvider = exports.ScalingDrawer = void 0;
+exports.default = exports.ExpoRouterDrawer = exports.DrawerMenuButton = exports.useScalingDrawer = exports.useDrawer = exports.useDrawerContext = exports.DrawerProvider = exports.ScalingDrawer = void 0;
 // Core components
 var ScalingDrawer_1 = require("./components/ScalingDrawer");
 Object.defineProperty(exports, "ScalingDrawer", { enumerable: true, get: function () { return ScalingDrawer_1.ScalingDrawer; } });
@@ -17,6 +17,8 @@ Object.defineProperty(exports, "ScalingDrawer", { enumerable: true, get: functio
 var DrawerContext_1 = require("./context/DrawerContext");
 Object.defineProperty(exports, "DrawerProvider", { enumerable: true, get: function () { return DrawerContext_1.DrawerProvider; } });
 Object.defineProperty(exports, "useDrawerContext", { enumerable: true, get: function () { return DrawerContext_1.useDrawerContext; } });
+var useDrawer_1 = require("./hooks/useDrawer");
+Object.defineProperty(exports, "useDrawer", { enumerable: true, get: function () { return useDrawer_1.useDrawer; } });
 var useScalingDrawer_1 = require("./hooks/useScalingDrawer");
 Object.defineProperty(exports, "useScalingDrawer", { enumerable: true, get: function () { return useScalingDrawer_1.useScalingDrawer; } });
 // Expo Router integration (modern navigation)

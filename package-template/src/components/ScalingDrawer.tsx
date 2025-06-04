@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react';
 import {
-  View,
-  StyleSheet,
-  Animated,
-  TouchableOpacity,
-  ViewStyle,
-  TouchableWithoutFeedback,
+    Animated,
+    StyleSheet,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
+    ViewStyle
 } from 'react-native';
 import { useDrawerContext } from '../context/DrawerContext';
 

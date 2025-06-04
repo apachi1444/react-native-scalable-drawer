@@ -11,21 +11,23 @@ export interface DrawerMenuItem {
     active?: boolean;
 }
 export interface ExpoRouterDrawerProps extends ScalingDrawerConfig {
-    /** Array of menu items with Expo Router hrefs */
-    menuItems: DrawerMenuItem[];
+    /** Array of menu items with Expo Router hrefs (optional - for quick setup) */
+    menuItems?: DrawerMenuItem[];
     /** Function to handle navigation (usually router.push) */
-    onNavigate: (href: string) => void;
+    onNavigate?: (href: string) => void;
     /** Main content (usually your Slot or Stack) */
     children: ReactNode;
+    /** Custom drawer content - if provided, menuItems will be ignored */
+    drawerContent?: ReactNode;
     /** Background color of the drawer */
     drawerBackgroundColor?: string;
-    /** Custom header component for the drawer */
+    /** Custom header component for the drawer (only used with menuItems) */
     drawerHeader?: ReactNode;
-    /** Custom footer component for the drawer */
+    /** Custom footer component for the drawer (only used with menuItems) */
     drawerFooter?: ReactNode;
-    /** Custom styles for menu items */
+    /** Custom styles for menu items (only used with menuItems) */
     menuItemStyle?: any;
-    /** Custom styles for menu item text */
+    /** Custom styles for menu item text (only used with menuItems) */
     menuItemTextStyle?: any;
 }
 /**

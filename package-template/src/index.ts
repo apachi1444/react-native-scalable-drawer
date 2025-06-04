@@ -13,6 +13,7 @@ export { ScalingDrawer } from './components/ScalingDrawer';
 
 // Context and hooks
 export { DrawerProvider, useDrawerContext } from './context/DrawerContext';
+export { useDrawer } from './hooks/useDrawer';
 export { useScalingDrawer } from './hooks/useScalingDrawer';
 
 // Expo Router integration (modern navigation)

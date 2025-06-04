@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDrawerContext } from '../components/DrawerContext';
+// Using the new flexible package approach!
+import { useDrawer } from '../package-template/src';
 
 export default function TestDrawerScreen() {
-  const { isOpen, openDrawer, closeDrawer, toggleDrawer } = useDrawerContext();
+  const { isOpen, open, close, toggle } = useDrawer();
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Scaling Drawer Test</Text>
+        <Text style={styles.title}>🎨 Flexible Scaling Drawer Test</Text>
         
         <View style={styles.statusContainer}>
           <Text style={styles.statusLabel}>Drawer Status:</Text>
@@ -19,46 +20,52 @@ export default function TestDrawerScreen() {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={openDrawer}>
+          <TouchableOpacity style={styles.button} onPress={open}>
             <Text style={styles.buttonText}>Open Drawer</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={closeDrawer}>
+          <TouchableOpacity style={styles.button} onPress={close}>
             <Text style={styles.buttonText}>Close Drawer</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, styles.toggleButton]} onPress={toggleDrawer}>
+          <TouchableOpacity style={[styles.button, styles.toggleButton]} onPress={toggle}>
             <Text style={styles.buttonText}>Toggle Drawer</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={styles.infoTitle}>How to Test:</Text>
+          <Text style={styles.infoTitle}>🎮 How to Test Flexibility:</Text>
           <Text style={styles.infoText}>
-            1. Tap the burger menu (☰) in the header to open the drawer
+            1. Tap the flexible menu button (☰/✕) in the header - it changes icon!
           </Text>
           <Text style={styles.infoText}>
-            2. Watch the main content scale down and slide to the right
+            2. Use the buttons below to control the drawer programmatically
           </Text>
           <Text style={styles.infoText}>
-            3. Notice the beautiful shadow effects behind the scaled content
+            3. Watch the main content scale down and slide to the right
           </Text>
           <Text style={styles.infoText}>
-            4. Tap anywhere on the scaled content to close the drawer
+            4. Notice the beautiful shadow effects behind the scaled content
           </Text>
           <Text style={styles.infoText}>
-            5. Try navigating to different screens from the drawer menu
+            5. Tap anywhere on the scaled content to close the drawer
+          </Text>
+          <Text style={styles.infoText}>
+            6. Try navigating to different screens from the custom drawer menu
           </Text>
         </View>
 
         <View style={styles.featuresContainer}>
-          <Text style={styles.featuresTitle}>Features Implemented:</Text>
+          <Text style={styles.featuresTitle}>🚀 Flexible Features:</Text>
           <Text style={styles.featureItem}>✅ Smooth scaling animation (0.8x scale)</Text>
           <Text style={styles.featureItem}>✅ Slide animation (300px distance)</Text>
           <Text style={styles.featureItem}>✅ Multi-layer shadow effects</Text>
           <Text style={styles.featureItem}>✅ Rounded corners when scaled</Text>
-          <Text style={styles.featureItem}>✅ Expo Router integration</Text>
-          <Text style={styles.featureItem}>✅ Context-based state management</Text>
+          <Text style={styles.featureItem}>✅ Complete custom drawer content</Text>
+          <Text style={styles.featureItem}>✅ Flexible menu button (changes icon)</Text>
+          <Text style={styles.featureItem}>✅ Global drawer control with useDrawer()</Text>
+          <Text style={styles.featureItem}>✅ No forced header structure</Text>
+          <Text style={styles.featureItem}>✅ Programmatic control from anywhere</Text>
           <Text style={styles.featureItem}>✅ Touch-to-close functionality</Text>
         </View>
       </View>
