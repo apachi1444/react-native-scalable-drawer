@@ -53,19 +53,25 @@ export default function TestDrawerScreen() {
             2. Use the buttons below to control the drawer programmatically
           </Text>
           <Text style={styles.infoText}>
-            3. 🆕 SWIPE from the left edge - watch it follow your finger in real-time!
+            3. 🆕 SWIPE RIGHT from the left edge to open - watch it follow your finger!
           </Text>
           <Text style={styles.infoText}>
-            4. Watch the main content scale down and slide to the right
+            4. 🆕 SWIPE LEFT on the scaled content to close - real-time closing!
           </Text>
           <Text style={styles.infoText}>
-            5. Notice the beautiful shadow effects behind the scaled content
+            5. 🆕 TAP anywhere on the scaled content to close instantly
           </Text>
           <Text style={styles.infoText}>
-            6. Tap anywhere on the scaled content to close the drawer
+            6. 🆕 PRESS BACK BUTTON when drawer is open - it closes instead of navigating
           </Text>
           <Text style={styles.infoText}>
-            7. Try navigating to different screens from the custom drawer menu
+            7. Watch the main content scale and slide smoothly in both directions
+          </Text>
+          <Text style={styles.infoText}>
+            8. Notice the beautiful shadow effects that follow your gestures
+          </Text>
+          <Text style={styles.infoText}>
+            9. Try navigating to different screens from the custom drawer menu
           </Text>
         </View>
 
@@ -81,9 +87,15 @@ export default function TestDrawerScreen() {
           <Text style={styles.featureItem}>✅ No forced header structure</Text>
           <Text style={styles.featureItem}>✅ Programmatic control from anywhere</Text>
           <Text style={styles.featureItem}>✅ Touch-to-close functionality</Text>
-          <Text style={styles.featureItem}>🆕 Real-time finger-following swipe gesture</Text>
-          <Text style={styles.featureItem}>🆕 Smooth progressive opening animation</Text>
-          <Text style={styles.featureItem}>🆕 Smart snap-back if not enough progress</Text>
+          <Text style={styles.featureItem}>🆕 Bidirectional real-time swipe gestures</Text>
+          <Text style={styles.featureItem}>🆕 Swipe right from left edge to open</Text>
+          <Text style={styles.featureItem}>🆕 Swipe left on scaled content to close</Text>
+          <Text style={styles.featureItem}>🆕 Tap on scaled content to close instantly</Text>
+          <Text style={styles.featureItem}>🆕 Hardware back button handling</Text>
+          <Text style={styles.featureItem}>🆕 Improved swipe detection sensitivity</Text>
+          <Text style={styles.featureItem}>🆕 Smooth progressive opening/closing animation</Text>
+          <Text style={styles.featureItem}>🆕 Smart snap-back for both directions</Text>
+          <Text style={styles.featureItem}>🆕 Velocity-based completion detection</Text>
           <Text style={styles.featureItem}>🆕 Enable/disable swipe gesture</Text>
         </View>
       </View>
