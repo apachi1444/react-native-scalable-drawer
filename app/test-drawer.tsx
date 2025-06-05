@@ -53,7 +53,7 @@ export default function TestDrawerScreen() {
             2. Use the buttons below to control the drawer programmatically
           </Text>
           <Text style={styles.infoText}>
-            3. 🆕 SWIPE from the left edge of the screen to open the drawer!
+            3. 🆕 SWIPE from the left edge - watch it follow your finger in real-time!
           </Text>
           <Text style={styles.infoText}>
             4. Watch the main content scale down and slide to the right
@@ -81,8 +81,9 @@ export default function TestDrawerScreen() {
           <Text style={styles.featureItem}>✅ No forced header structure</Text>
           <Text style={styles.featureItem}>✅ Programmatic control from anywhere</Text>
           <Text style={styles.featureItem}>✅ Touch-to-close functionality</Text>
-          <Text style={styles.featureItem}>🆕 Swipe gesture to open drawer</Text>
-          <Text style={styles.featureItem}>🆕 Configurable swipe threshold</Text>
+          <Text style={styles.featureItem}>🆕 Real-time finger-following swipe gesture</Text>
+          <Text style={styles.featureItem}>🆕 Smooth progressive opening animation</Text>
+          <Text style={styles.featureItem}>🆕 Smart snap-back if not enough progress</Text>
           <Text style={styles.featureItem}>🆕 Enable/disable swipe gesture</Text>
         </View>
       </View>

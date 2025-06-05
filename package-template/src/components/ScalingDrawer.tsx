@@ -1,13 +1,13 @@
 import React, { ReactNode, useRef } from 'react';
 import {
-  Animated,
-  Dimensions,
-  PanResponder,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-  ViewStyle
+    Animated,
+    Dimensions,
+    PanResponder,
+    StyleSheet,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
+    ViewStyle
 } from 'react-native';
 import { useDrawerContext } from '../context/DrawerContext';
 
@@ -93,7 +93,12 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
     }
   };
 
-  // Create PanResponder for swipe gesture
+  // Track gesture state for real-time animation
+  const gestureProgress = useRef(new Animated.Value(0)).current;
+  const isGesturing = useRef(false);
+  const currentProgress = useRef(0);
+
+  // Create PanResponder for smooth real-time swipe gesture
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
@@ -110,36 +115,100 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
       },
 
       onPanResponderGrant: () => {
-        // Gesture started
+        // Gesture started - prepare for real-time animation
+        isGesturing.current = true;
+        gestureProgress.stopAnimation();
       },
 
-      onPanResponderMove: (evt, gestureState) => {
-        // Track the swipe movement
+      onPanResponderMove: (_, gestureState) => {
+        // Real-time finger following animation
         const { dx } = gestureState;
 
-        // Only allow rightward movement when drawer is closed
         if (!isOpen && dx > 0) {
-          // Optional: You could add real-time preview here
-          // For now, we'll just wait for the gesture to complete
+          // Calculate progress (0 to 1) based on swipe distance
+          const maxSwipeDistance = screenWidth * 0.7; // 70% of screen width
+          const progress = Math.min(dx / maxSwipeDistance, 1);
+
+          // Store current progress for release calculation
+          currentProgress.current = progress;
+
+          // Update gesture progress for real-time animation
+          gestureProgress.setValue(progress);
+
+          // Apply real-time transformations
+          const slideValue = progress * (screenWidth * 0.7); // Slide distance
+          const scaleValue = 1 - (progress * 0.2); // Scale from 1 to 0.8
+
+          // Update animations in real-time
+          slideAnim.setValue(slideValue);
+          scaleAnim.setValue(scaleValue);
+          shadowOpacityAnim.setValue(progress);
         }
       },
 
-      onPanResponderRelease: (evt, gestureState) => {
-        const { dx, vx } = gestureState;
+      onPanResponderRelease: (_, gestureState) => {
+        const { vx } = gestureState;
+        isGesturing.current = false;
 
-        // Check if swipe meets threshold for opening
-        const swipeDistance = dx;
-        const swipeVelocity = vx;
+        // Calculate if we should complete the opening
+        const progress = currentProgress.current;
+        const progressThreshold = swipeThreshold / (screenWidth * 0.7); // Convert pixels to progress
+        const shouldOpen = progress > progressThreshold || vx > 0.5; // Threshold progress or fast velocity
 
-        // Open drawer if swipe distance or velocity is sufficient
-        if (swipeDistance > swipeThreshold || swipeVelocity > 0.5) {
+        if (shouldOpen) {
+          // Complete the opening animation
           openDrawer();
           onDrawerOpen?.();
+        } else {
+          // Snap back to closed position
+          Animated.parallel([
+            Animated.timing(slideAnim, {
+              toValue: 0,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnim, {
+              toValue: 1,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+            Animated.timing(shadowOpacityAnim, {
+              toValue: 0,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+          ]).start();
         }
+
+        // Reset gesture progress
+        gestureProgress.setValue(0);
+        currentProgress.current = 0;
       },
 
       onPanResponderTerminate: () => {
-        // Gesture was interrupted
+        // Gesture was interrupted - snap back to closed
+        isGesturing.current = false;
+
+        Animated.parallel([
+          Animated.timing(slideAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+          }),
+          Animated.timing(scaleAnim, {
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true,
+          }),
+          Animated.timing(shadowOpacityAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+          }),
+        ]).start();
+
+        gestureProgress.setValue(0);
+        currentProgress.current = 0;
       },
     })
   ).current;
