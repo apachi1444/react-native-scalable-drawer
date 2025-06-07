@@ -1,16 +1,17 @@
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  TextInput,
-  Alert,
-  Modal,
+    Alert,
+    FlatList,
+    Modal,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useDrawer } from '../../package-template/src';
 
 // Mock table data
@@ -124,6 +125,8 @@ export default function TableDetailScreen() {
   const [records, setRecords] = useState(tableData?.records || []);
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
+  const [addRecordModalVisible, setAddRecordModalVisible] = useState(false);
+  const [newRecord, setNewRecord] = useState<any>({});
 
   if (!tableData) {
     return (
@@ -166,6 +169,48 @@ export default function TableDetailScreen() {
   const handleViewRecord = (record: any) => {
     setSelectedRecord(record);
     setViewModalVisible(true);
+  };
+
+  const handleAddRecord = () => {
+    // Initialize new record with empty values for all columns
+    const emptyRecord: any = { id: '' };
+    tableData.columns.forEach(column => {
+      emptyRecord[column] = '';
+    });
+    setNewRecord(emptyRecord);
+    setAddRecordModalVisible(true);
+  };
+
+  const handleSaveNewRecord = () => {
+    // Validate that all fields are filled
+    const emptyFields = tableData.columns.filter(column => !newRecord[column]?.trim());
+    if (emptyFields.length > 0) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    // Generate new ID
+    const maxId = Math.max(...records.map(r => parseInt(r.id) || 0));
+    const newId = (maxId + 1).toString();
+
+    // Add the new record
+    const recordToAdd = { ...newRecord, id: newId };
+    setRecords(prevRecords => [...prevRecords, recordToAdd]);
+
+    // Reset and close modal
+    setNewRecord({});
+    setAddRecordModalVisible(false);
+
+    Alert.alert('Success', 'Record added successfully!');
+  };
+
+  const handleCancelAddRecord = () => {
+    setNewRecord({});
+    setAddRecordModalVisible(false);
+  };
+
+  const updateNewRecordField = (field: string, value: string) => {
+    setNewRecord(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -212,7 +257,7 @@ export default function TableDetailScreen() {
       <View style={styles.recordsContainer}>
         <View style={styles.recordsHeader}>
           <Text style={styles.recordsTitle}>Records</Text>
-          <TouchableOpacity style={styles.addButton}>
+          <TouchableOpacity style={styles.addButton} onPress={handleAddRecord}>
             <Text style={styles.addIcon}>+</Text>
             <Text style={styles.addText}>Add Record</Text>
           </TouchableOpacity>
@@ -261,6 +306,57 @@ export default function TableDetailScreen() {
                 ))}
               </View>
             )}
+          </View>
+        </View>
+      </Modal>
+
+      {/* Add Record Modal */}
+      <Modal
+        visible={addRecordModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={handleCancelAddRecord}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.addRecordModalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Add New Record</Text>
+              <TouchableOpacity onPress={handleCancelAddRecord}>
+                <Text style={styles.modalClose}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={styles.addRecordForm} showsVerticalScrollIndicator={false}>
+              {tableData?.columns.map((column) => (
+                <View key={column} style={styles.addRecordField}>
+                  <Text style={styles.addRecordLabel}>{column}</Text>
+                  <TextInput
+                    style={styles.addRecordInput}
+                    value={newRecord[column] || ''}
+                    onChangeText={(value) => updateNewRecordField(column, value)}
+                    placeholder={`Enter ${column.toLowerCase()}`}
+                    placeholderTextColor="#666"
+                    multiline={false}
+                  />
+                </View>
+              ))}
+            </ScrollView>
+
+            <View style={styles.addRecordActions}>
+              <TouchableOpacity
+                style={styles.cancelAddButton}
+                onPress={handleCancelAddRecord}
+              >
+                <Text style={styles.cancelAddText}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.saveAddButton}
+                onPress={handleSaveNewRecord}
+              >
+                <Text style={styles.saveAddText}>Add Record</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -553,5 +649,65 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
     padding: 12,
     borderRadius: 8,
+  },
+  addRecordModalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    margin: 20,
+    maxHeight: '85%',
+    width: '90%',
+  },
+  addRecordForm: {
+    maxHeight: 400,
+    padding: 20,
+  },
+  addRecordField: {
+    marginBottom: 20,
+  },
+  addRecordLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#333',
+    marginBottom: 8,
+  },
+  addRecordInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: '#333',
+    backgroundColor: '#fff',
+  },
+  addRecordActions: {
+    flexDirection: 'row',
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    gap: 12,
+  },
+  cancelAddButton: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    padding: 16,
+    alignItems: 'center',
+  },
+  cancelAddText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#666',
+  },
+  saveAddButton: {
+    flex: 1,
+    backgroundColor: '#673AB7',
+    borderRadius: 8,
+    padding: 16,
+    alignItems: 'center',
+  },
+  saveAddText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
