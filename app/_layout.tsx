@@ -37,8 +37,9 @@ function AppContent() {
         {/* Menu Items */}
         <View style={{ flex: 1, padding: 20 }}>
           {[
-            { label: 'Home', href: '/(tabs)', icon: '🏠' },
-            { label: 'Explore', href: '/(tabs)/explore', icon: '🔍' },
+            { label: 'Tables Home', href: '/tables', icon: '📊' },
+            { label: 'Search Tables', href: '/tables/search', icon: '🔍' },
+            { label: 'Create Table', href: '/tables/create', icon: '➕' },
             { label: 'Profile', href: '/profile', icon: '👤' },
             { label: 'Settings', href: '/settings', icon: '⚙️' },
             { label: 'Test Drawer', href: '/test-drawer', icon: '🧪' },
@@ -85,6 +86,7 @@ function AppContent() {
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="tables" options={{ headerShown: false }} />
           <Stack.Screen name="profile" options={{ headerShown: false }} />
           <Stack.Screen name="settings" options={{ headerShown : false }} />
           <Stack.Screen name="test-drawer" options={{ headerShown: false }} />
