@@ -1,18 +1,21 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-    Alert,
-    FlatList,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  FlatList,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDrawer } from '../../package-template/src';
+
+// Import theme colors
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 // Mock table data
 const mockTableData = {
@@ -44,6 +47,7 @@ interface RecordRowProps {
 }
 
 const RecordRow: React.FC<RecordRowProps> = ({ record, columns, onEdit, onDelete, onView }) => {
+  const colors = useThemeColors();
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
 
@@ -65,50 +69,223 @@ const RecordRow: React.FC<RecordRowProps> = ({ record, columns, onEdit, onDelete
     setEditValue('');
   };
 
-  return (
-    <View style={styles.recordRow}>
-      <View style={styles.recordContent}>
-        {columns.map((column) => (
-          <View key={column} style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>{column}:</Text>
-            {editingField === column ? (
-              <View style={styles.editContainer}>
-                <TextInput
-                  style={styles.editInput}
-                  value={editValue}
-                  onChangeText={setEditValue}
-                  autoFocus
-                  onBlur={handleEditCancel}
-                />
-                <TouchableOpacity style={styles.saveButton} onPress={handleEditSave}>
-                  <Text style={styles.saveIcon}>✓</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.cancelButton} onPress={handleEditCancel}>
-                  <Text style={styles.cancelIcon}>✕</Text>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <TouchableOpacity
-                style={styles.fieldValue}
-                onPress={() => handleEditStart(column, record[column])}
-              >
-                <Text style={styles.fieldText}>{record[column]}</Text>
-              </TouchableOpacity>
-            )}
+  const dynamicStyles = StyleSheet.create({
+    recordRow: {
+      backgroundColor: colors.surface,
+      borderRadius: 8,
+      padding: 12,
+      marginBottom: 6,
+      borderWidth: 1,
+      borderColor: colors.border,
+      shadowColor: colors.textPrimary,
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.05,
+      shadowRadius: 2,
+      elevation: 1,
+    },
+    recordContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    fieldsContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      gap: 12,
+    },
+    fieldItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      minWidth: 0,
+    },
+    fieldLabel: {
+      fontSize: 10,
+      color: colors.textSecondary,
+      fontWeight: '600',
+      marginRight: 4,
+      textTransform: 'uppercase',
+    },
+    fieldValue: {
+      fontSize: 13,
+      color: colors.textPrimary,
+      fontWeight: '500',
+      flexShrink: 1,
+    },
+    primaryField: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: colors.textPrimary,
+    },
+    editInput: {
+      flex: 1,
+      backgroundColor: colors.surface,
+      borderWidth: 2,
+      borderColor: colors.primary,
+      borderRadius: 6,
+      padding: 8,
+      fontSize: 14,
+      color: colors.textPrimary,
+      minHeight: 32,
+    },
+    editContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+    },
+    saveButton: {
+      backgroundColor: colors.secondary,
+      padding: 8,
+      borderRadius: 6,
+      minWidth: 32,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    cancelButton: {
+      backgroundColor: colors.danger,
+      padding: 8,
+      borderRadius: 6,
+      minWidth: 32,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    saveIcon: {
+      color: colors.onSecondary,
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    cancelIcon: {
+      color: colors.onDanger,
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    actionsContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      marginLeft: 12,
+    },
+    actionButton: {
+      padding: 6,
+      borderRadius: 6,
+      minWidth: 28,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    viewButton: {
+      backgroundColor: colors.primary,
+    },
+    deleteButton: {
+      backgroundColor: colors.danger,
+    },
+    actionIcon: {
+      fontSize: 12,
+      fontWeight: 'bold',
+    },
+    viewIcon: {
+      color: colors.onPrimary,
+    },
+    deleteIcon: {
+      color: colors.onDanger,
+    },
+    editingRow: {
+      backgroundColor: colors.background,
+      borderColor: colors.primary,
+      borderWidth: 2,
+    },
+    editActions: {
+      flexDirection: 'row',
+      gap: 4,
+      marginLeft: 8,
+    },
+  });
+
+  // If editing, show full edit mode
+  if (editingField) {
+    return (
+      <View style={[dynamicStyles.recordRow, dynamicStyles.editingRow]}>
+        <View style={dynamicStyles.recordContent}>
+          <View style={dynamicStyles.fieldsContainer}>
+            <Text style={dynamicStyles.fieldLabel}>{editingField}:</Text>
+            <TextInput
+              style={dynamicStyles.editInput}
+              value={editValue}
+              onChangeText={setEditValue}
+              autoFocus
+              onBlur={handleEditCancel}
+              placeholderTextColor={colors.textSecondary}
+            />
           </View>
-        ))}
+          <View style={dynamicStyles.editActions}>
+            <TouchableOpacity style={dynamicStyles.saveButton} onPress={handleEditSave}>
+              <Text style={dynamicStyles.saveIcon}>✓</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={dynamicStyles.cancelButton} onPress={handleEditCancel}>
+              <Text style={dynamicStyles.cancelIcon}>✕</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-      
-      <View style={styles.recordActions}>
-        <TouchableOpacity style={styles.actionButton} onPress={() => onView(record)}>
-          <Text style={styles.actionIcon}>👁</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.actionButton, styles.deleteButton]} 
-          onPress={() => onDelete(record.id)}
-        >
-          <Text style={styles.actionIcon}>🗑</Text>
-        </TouchableOpacity>
+    );
+  }
+
+  // Normal compact view - show fields horizontally
+  return (
+    <View style={dynamicStyles.recordRow}>
+      <View style={dynamicStyles.recordContent}>
+        <View style={dynamicStyles.fieldsContainer}>
+          {/* Show first field (usually Name) as primary */}
+          {columns[0] && (
+            <TouchableOpacity
+              style={dynamicStyles.fieldItem}
+              onPress={() => handleEditStart(columns[0], record[columns[0]])}
+            >
+              <Text style={dynamicStyles.primaryField} numberOfLines={1}>
+                {record[columns[0]]}
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {/* Show remaining fields as secondary info */}
+          {columns.slice(1, 3).map((column) => (
+            <TouchableOpacity
+              key={column}
+              style={dynamicStyles.fieldItem}
+              onPress={() => handleEditStart(column, record[column])}
+            >
+              <Text style={dynamicStyles.fieldLabel}>{column}:</Text>
+              <Text style={dynamicStyles.fieldValue} numberOfLines={1}>
+                {record[column]}
+              </Text>
+            </TouchableOpacity>
+          ))}
+
+          {/* Show count of additional fields if there are more */}
+          {columns.length > 3 && (
+            <TouchableOpacity onPress={() => onView(record)}>
+              <Text style={[dynamicStyles.fieldLabel, { color: colors.primary }]}>
+                +{columns.length - 3} more
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <View style={dynamicStyles.actionsContainer}>
+          <TouchableOpacity
+            style={[dynamicStyles.actionButton, dynamicStyles.viewButton]}
+            onPress={() => onView(record)}
+          >
+            <Text style={[dynamicStyles.actionIcon, dynamicStyles.viewIcon]}>👁</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[dynamicStyles.actionButton, dynamicStyles.deleteButton]}
+            onPress={() => onDelete(record.id)}
+          >
+            <Text style={[dynamicStyles.actionIcon, dynamicStyles.deleteIcon]}>🗑</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -118,15 +295,27 @@ export default function TableDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { toggle, isOpen } = useDrawer();
-  
+  const colors = useThemeColors();
+
   const tableId = Array.isArray(id) ? id[0] : id;
   const tableData = mockTableData[tableId as keyof typeof mockTableData];
-  
+
   const [records, setRecords] = useState(tableData?.records || []);
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
   const [addRecordModalVisible, setAddRecordModalVisible] = useState(false);
   const [newRecord, setNewRecord] = useState<any>({});
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredRecords = useMemo(() => {
+    if (!searchQuery.trim()) return records;
+
+    return records.filter(record =>
+      tableData.columns.some(column =>
+        record[column as keyof typeof record]?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [records, searchQuery, tableData?.columns]);
 
   if (!tableData) {
     return (
@@ -210,22 +399,90 @@ export default function TableDetailScreen() {
   };
 
   const updateNewRecordField = (field: string, value: string) => {
-    setNewRecord(prev => ({ ...prev, [field]: value }));
+    setNewRecord((prev: any) => ({ ...prev, [field]: value }));
   };
 
+  const dynamicStyles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: 16,
+      backgroundColor: colors.primary,
+      elevation: 4,
+      shadowColor: colors.textPrimary,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+    },
+    headerTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.onPrimary,
+      flex: 1,
+      textAlign: 'center',
+      marginHorizontal: 16,
+    },
+    backButton: {
+      padding: 8,
+    },
+    backIcon: {
+      fontSize: 20,
+      color: colors.onPrimary,
+    },
+    menuButton: {
+      padding: 8,
+    },
+    menuIcon: {
+      fontSize: 20,
+      color: colors.onPrimary,
+    },
+    searchContainer: {
+      backgroundColor: colors.surface,
+      padding: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    searchInput: {
+      backgroundColor: colors.background,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 12,
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      fontSize: 16,
+      color: colors.textPrimary,
+    },
+  });
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={dynamicStyles.container}>
       {/* Custom Header */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backIcon}>←</Text>
+      <View style={dynamicStyles.header}>
+        <TouchableOpacity style={dynamicStyles.backButton} onPress={() => router.back()}>
+          <Text style={dynamicStyles.backIcon}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>
+        <Text style={dynamicStyles.headerTitle} numberOfLines={1}>
           {tableData.title}
         </Text>
-        <TouchableOpacity style={styles.menuButton} onPress={toggle}>
-          <Text style={styles.menuIcon}>{isOpen ? '✕' : '☰'}</Text>
+        <TouchableOpacity style={dynamicStyles.menuButton} onPress={toggle}>
+          <Text style={dynamicStyles.menuIcon}>{isOpen ? '✕' : '☰'}</Text>
         </TouchableOpacity>
+      </View>
+
+      {/* Search Section */}
+      <View style={dynamicStyles.searchContainer}>
+        <TextInput
+          style={dynamicStyles.searchInput}
+          placeholder="Search records..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholderTextColor={colors.textSecondary}
+        />
       </View>
 
       {/* Table Overview */}
@@ -264,7 +521,7 @@ export default function TableDetailScreen() {
         </View>
 
         <FlatList
-          data={records}
+          data={filteredRecords}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <RecordRow
@@ -276,7 +533,38 @@ export default function TableDetailScreen() {
             />
           )}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.recordsList}
+          contentContainerStyle={{ padding: 16 }}
+          ListEmptyComponent={
+            <View style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 40,
+              backgroundColor: colors.surface,
+              borderRadius: 16,
+              borderWidth: 1,
+              borderColor: colors.border,
+            }}>
+              <Text style={{ fontSize: 48, marginBottom: 16 }}>🔍</Text>
+              <Text style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: colors.textPrimary,
+                marginBottom: 8
+              }}>
+                {searchQuery ? 'No matching records' : 'No records found'}
+              </Text>
+              <Text style={{
+                fontSize: 14,
+                color: colors.textSecondary,
+                textAlign: 'center'
+              }}>
+                {searchQuery
+                  ? `No records match "${searchQuery}"`
+                  : 'Add your first record to get started'
+                }
+              </Text>
+            </View>
+          }
         />
       </View>
 
@@ -711,3 +999,4 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
+
