@@ -1,11 +1,11 @@
 import React, { ReactNode, useRef } from 'react';
 import {
-    Animated,
-    Dimensions,
-    PanResponder,
-    StyleSheet,
-    View,
-    ViewStyle
+  Animated,
+  Dimensions,
+  PanResponder,
+  StyleSheet,
+  View,
+  ViewStyle
 } from 'react-native';
 import { useDrawerContext } from '../context/DrawerContext';
 
@@ -68,7 +68,7 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
   onDrawerClose,
   closeOnContentPress = true,
   borderRadius = 20,
-  enableSwipeGesture = true,
+  enableSwipeGesture,
   swipeThreshold = 50,
 }) => {
   const {
@@ -78,7 +78,11 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
     shadowOpacityAnim,
     closeDrawer,
     openDrawer,
+    enableGestures
   } = useDrawerContext();
+
+  // Final gesture control: both provider and component must allow gestures
+  const gesturesEnabled = enableGestures && enableSwipeGesture;
 
   // Get screen width for swipe calculations
   const screenWidth = Dimensions.get('window').width;
@@ -112,26 +116,31 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
   // Create PanResponder for smooth real-time swipe gesture (both opening and closing)
   const panResponder = useRef(
     PanResponder.create({
+      // Don't capture on start - let scroll views have first chance
+      onStartShouldSetPanResponder: () => false,
+
+      // Only capture after movement, and be very conservative
       onMoveShouldSetPanResponder: (evt, gestureState) => {
-        if (!enableSwipeGesture) return false;
+        if (!gesturesEnabled) return false;
 
         const { dx, dy } = gestureState;
-        const isHorizontalSwipe = Math.abs(dx) > Math.abs(dy);
 
-        // Require minimum movement to start gesture
-        const minMovement = 5;
-        const totalMovement = Math.sqrt(dx * dx + dy * dy);
-        if (totalMovement < minMovement) return false;
+        // SCROLL-FIRST PRIORITY: Be much more strict about when to capture gestures
+        const isStronglyHorizontal = Math.abs(dx) > Math.abs(dy) * 4; // Require 4:1 ratio for horizontal
+        const hasSignificantMovement = Math.abs(dx) > 25; // Require even more movement
+
+        // Absolutely don't interfere with any vertical movement
+        if (Math.abs(dy) > 5) return false;
 
         if (isOpen) {
-          // When drawer is open: detect leftward swipe from anywhere on scaled content
-          const isLeftwardSwipe = dx < -minMovement; // More sensitive leftward detection
-          return isHorizontalSwipe && isLeftwardSwipe;
+          // When drawer is open: only capture very strong leftward swipes
+          const isStrongLeftSwipe = dx < -30 && isStronglyHorizontal;
+          return isStrongLeftSwipe && hasSignificantMovement;
         } else {
-          // When drawer is closed: detect rightward swipe from left edge
-          const isFromLeftEdge = evt.nativeEvent.pageX < 50; // 50px from left edge
-          const isRightwardSwipe = dx > minMovement; // More sensitive rightward detection
-          return isHorizontalSwipe && isFromLeftEdge && isRightwardSwipe;
+          // When drawer is closed: only capture from tiny edge with very strong rightward movement
+          const isFromTinyEdge = evt.nativeEvent.pageX < 15; // Reduced to 15px
+          const isVeryStrongRightSwipe = dx > 30 && isStronglyHorizontal;
+          return isFromTinyEdge && isVeryStrongRightSwipe && hasSignificantMovement;
         }
       },
 
@@ -141,10 +150,16 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
         gestureProgress.stopAnimation();
         gestureStartTime.current = Date.now();
       },
-
+      
       onPanResponderMove: (_, gestureState) => {
         // Real-time finger following animation for both opening and closing
-        const { dx } = gestureState;
+        const { dx, dy } = gestureState;
+
+        // If vertical movement becomes significant, release the gesture to scroll views
+        if (Math.abs(dy) > Math.abs(dx) * 0.5) {
+          // This is becoming more vertical than horizontal - let scroll views handle it
+          return;
+        }
 
         if (!isOpen && dx > 0) {
           // OPENING: Calculate progress (0 to 1) based on rightward swipe distance
@@ -349,7 +364,7 @@ export const ScalingDrawer: React.FC<ScalingDrawerProps> = ({
             ],
           },
         ]}
-        {...(enableSwipeGesture ? panResponder.panHandlers : {})}
+        {...(gesturesEnabled ? panResponder.panHandlers : {})}
       >
         <TouchableWithoutFeedback
           onPress={() => {

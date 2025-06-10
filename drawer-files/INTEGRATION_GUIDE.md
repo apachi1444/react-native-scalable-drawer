@@ -91,6 +91,7 @@ export function MenuButton() {
   scaleFactor={0.85}         // Scale factor for main content (default: 0.8)
   animationDuration={250}    // Animation duration in ms (default: 250)
   shadowOpacity={1}          // Shadow opacity when open (default: 1)
+  enableGestures={false}     // 🎯 NEW: Disable gestures for scroll-first priority
 >
 ```
 
@@ -204,12 +205,46 @@ const { width } = Dimensions.get('window');
 - Handles safe areas automatically when used with `react-native-safe-area-context`
 - Respects device orientation changes
 
+## 🎯 Gesture Control Options
+
+### For Apps with Heavy Scrolling (Recommended)
+```tsx
+<DrawerProvider enableGestures={false}>
+  {/* Your app with lots of FlatLists/ScrollViews */}
+</DrawerProvider>
+```
+**Benefits:**
+- ✅ Zero gesture interference with scrolling
+- ✅ Perfect for table/list-heavy apps
+- ✅ Button-only control for reliability
+- ✅ No touch event conflicts
+
+### For Apps with Minimal Scrolling
+```tsx
+<DrawerProvider enableGestures={true}>
+  {/* Your app with mostly static content */}
+</DrawerProvider>
+```
+**Benefits:**
+- ✅ Native-like swipe gestures
+- ✅ Swipe from left edge to open
+- ✅ Swipe left to close when open
+
 ## 🎯 Best Practices
 
-1. Keep drawer content lightweight for smooth animations
-2. Use consistent colors and styling across your app
-3. Provide clear visual feedback for drawer state
-4. Test on different screen sizes and orientations
-5. Consider accessibility features (screen readers, etc.)
+1. **Use `enableGestures={false}` for scroll-heavy apps** - Prevents conflicts
+2. Keep drawer content lightweight for smooth animations
+3. Use consistent colors and styling across your app
+4. Provide clear visual feedback for drawer state
+5. Test on different screen sizes and orientations
+6. Consider accessibility features (screen readers, etc.)
 
-That's it! You now have a fully functional scaling drawer in your project. 🎉
+## 🚀 Perfect for Your Other Project!
+
+This drawer system is ideal for projects with:
+- ✅ Lots of FlatLists and ScrollViews
+- ✅ Table management interfaces
+- ✅ Data-heavy screens
+- ✅ Need for reliable, conflict-free scrolling
+
+Just copy the files and set `enableGestures={false}` for maximum compatibility! 🎉

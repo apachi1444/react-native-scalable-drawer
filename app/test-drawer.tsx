@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDrawer } from '../package-template/src';
 
 export default function TestDrawerScreen() {
-  const { isOpen, open, close, toggle } = useDrawer();
+  const { isOpen, open, close, toggle, enableGestures } = useDrawer();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,6 +27,13 @@ export default function TestDrawerScreen() {
           <Text style={styles.statusLabel}>Drawer Status:</Text>
           <Text style={[styles.statusValue, { color: isOpen ? '#34C759' : '#FF3B30' }]}>
             {isOpen ? 'OPEN' : 'CLOSED'}
+          </Text>
+        </View>
+
+        <View style={styles.statusContainer}>
+          <Text style={styles.statusLabel}>Gestures:</Text>
+          <Text style={[styles.statusValue, { color: enableGestures ? '#34C759' : '#FF3B30' }]}>
+            {enableGestures ? 'ENABLED' : 'DISABLED'}
           </Text>
         </View>
 
@@ -53,13 +60,10 @@ export default function TestDrawerScreen() {
             2. Use the buttons below to control the drawer programmatically
           </Text>
           <Text style={styles.infoText}>
-            3. 🆕 SWIPE RIGHT from the left edge to open - watch it follow your finger!
+            3. 🚫 GESTURES ARE DISABLED - Only button control works (perfect for scroll-heavy apps!)
           </Text>
           <Text style={styles.infoText}>
-            4. 🆕 SWIPE LEFT on the scaled content to close - real-time closing!
-          </Text>
-          <Text style={styles.infoText}>
-            5. 🆕 TAP anywhere on the scaled content to close instantly
+            4. ✅ TAP anywhere on the scaled content to close instantly
           </Text>
           <Text style={styles.infoText}>
             6. 🆕 PRESS BACK BUTTON when drawer is open - it closes instead of navigating
@@ -87,16 +91,16 @@ export default function TestDrawerScreen() {
           <Text style={styles.featureItem}>✅ No forced header structure</Text>
           <Text style={styles.featureItem}>✅ Programmatic control from anywhere</Text>
           <Text style={styles.featureItem}>✅ Touch-to-close functionality</Text>
-          <Text style={styles.featureItem}>🆕 Bidirectional real-time swipe gestures</Text>
-          <Text style={styles.featureItem}>🆕 Swipe right from left edge to open</Text>
-          <Text style={styles.featureItem}>🆕 Swipe left on scaled content to close</Text>
-          <Text style={styles.featureItem}>🆕 Tap on scaled content to close instantly</Text>
-          <Text style={styles.featureItem}>🆕 Hardware back button handling</Text>
-          <Text style={styles.featureItem}>🆕 Improved swipe detection sensitivity</Text>
-          <Text style={styles.featureItem}>🆕 Smooth progressive opening/closing animation</Text>
-          <Text style={styles.featureItem}>🆕 Smart snap-back for both directions</Text>
-          <Text style={styles.featureItem}>🆕 Velocity-based completion detection</Text>
-          <Text style={styles.featureItem}>🆕 Enable/disable swipe gesture</Text>
+          <Text style={styles.featureItem}>🎯 Configurable gesture control (enabled/disabled)</Text>
+          <Text style={styles.featureItem}>🚫 Gestures DISABLED for scroll-first priority</Text>
+          <Text style={styles.featureItem}>✅ Perfect for apps with lots of scrollable content</Text>
+          <Text style={styles.featureItem}>✅ No gesture interference with FlatList/ScrollView</Text>
+          <Text style={styles.featureItem}>✅ Button-only control for maximum reliability</Text>
+          <Text style={styles.featureItem}>✅ Tap on scaled content to close instantly</Text>
+          <Text style={styles.featureItem}>✅ Hardware back button handling</Text>
+          <Text style={styles.featureItem}>✅ Smooth scaling and sliding animations</Text>
+          <Text style={styles.featureItem}>✅ Multi-layer shadow effects</Text>
+          <Text style={styles.featureItem}>🔧 Easy to copy to other projects</Text>
         </View>
       </View>
     </SafeAreaView>

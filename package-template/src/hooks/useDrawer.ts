@@ -30,6 +30,8 @@ export const useDrawer = () => {
     close: context.closeDrawer,
     /** Toggle drawer state */
     toggle: context.toggleDrawer,
+    /** Whether gestures are enabled */
+    enableGestures: context.enableGestures,
     /** All animated values (for advanced usage) */
     animations: {
       slideAnim: context.slideAnim,

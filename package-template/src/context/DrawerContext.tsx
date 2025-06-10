@@ -1,5 +1,5 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useScalingDrawer, ScalingDrawerConfig, ScalingDrawerState } from '../hooks/useScalingDrawer';
+import React, { createContext, ReactNode, useContext } from 'react';
+import { ScalingDrawerConfig, ScalingDrawerState, useScalingDrawer } from '../hooks/useScalingDrawer';
 
 /**
  * Context for sharing drawer state across the app
@@ -8,20 +8,29 @@ const DrawerContext = createContext<ScalingDrawerState | undefined>(undefined);
 
 export interface DrawerProviderProps extends ScalingDrawerConfig {
   children: ReactNode;
+  /** Whether to enable swipe gestures for opening/closing drawer (default: true) */
+  enableGestures?: boolean;
 }
 
 /**
  * Provider component that makes drawer state available to all children
  * This allows any component in the app to control the drawer
  */
-export const DrawerProvider: React.FC<DrawerProviderProps> = ({ 
-  children, 
-  ...config 
+export const DrawerProvider: React.FC<DrawerProviderProps> = ({
+  children,
+  enableGestures = true,
+  ...config
 }) => {
   const drawerState = useScalingDrawer(config);
 
+  // Add gesture control to the context
+  const contextValue = {
+    ...drawerState,
+    enableGestures,
+  };
+
   return (
-    <DrawerContext.Provider value={drawerState}>
+    <DrawerContext.Provider value={contextValue}>
       {children}
     </DrawerContext.Provider>
   );

@@ -71,7 +71,7 @@ function AppContent() {
         drawerBackgroundColor="#673AB7"
         showShadow={true}
         borderRadius={25}
-        enableSwipeGesture={true}
+        enableSwipeGesture={false}
         swipeThreshold={50}
       >
         <Stack
@@ -113,6 +113,7 @@ export default function RootLayout() {
       slideDistance={300}
       scaleFactor={0.8}
       animationDuration={250}
+      enableGestures={false}
     >
       <AppContent />
     </DrawerProvider>

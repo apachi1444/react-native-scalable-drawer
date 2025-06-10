@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Animated, Dimensions } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -31,6 +31,8 @@ export interface ScalingDrawerState {
   closeDrawer: () => void;
   /** Function to toggle drawer state */
   toggleDrawer: () => void;
+  /** Whether gestures are enabled (added by provider) */
+  enableGestures?: boolean;
 }
 
 /**
