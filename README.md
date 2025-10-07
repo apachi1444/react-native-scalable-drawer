@@ -6,7 +6,7 @@
 
 **A beautiful, performant drawer navigation with scaling animations and shadow effects for Expo Router and React Native**
 
-[![npm version](https://badge.fury.io/js/react-native-scaling-drawer.svg)](https://badge.fury.io/js/react-native-scaling-drawer)
+[![npm version](https://badge.fury.io/js/@apachi14444/react-native-scaling-drawer.svg)](https://badge.fury.io/js/@apachi14444/react-native-scaling-drawer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![Expo](https://img.shields.io/badge/Expo-Ready-blue.svg)](https://expo.dev)
@@ -30,13 +30,13 @@
 
 ```bash
 # npm
-npm install react-native-scaling-drawer
+npm install @apachi14444/react-native-scaling-drawer
 
 # yarn
-yarn add react-native-scaling-drawer
+yarn add @apachi14444/react-native-scaling-drawer
 
 # pnpm
-pnpm add react-native-scaling-drawer
+pnpm add @apachi14444/react-native-scaling-drawer
 ```
 
 ### Dependencies
@@ -48,7 +48,7 @@ This package requires:
 ### Basic Usage
 
 ```tsx
-import { DrawerProvider, useDrawer } from 'react-native-scaling-drawer';
+import { DrawerProvider, useDrawer } from '@apachi14444/react-native-scaling-drawer';
 
 // 1. Wrap your app with DrawerProvider
 export default function App() {
@@ -77,10 +77,10 @@ Check out the full example app in the [`example`](./example) directory:
 
 ```bash
 # Clone the repository
-git clone https://github.com/89viral1/react-native-scaling-drawer.git
+git clone https://github.com/apachi1444/react-native-scalable-drawer.git
 
 # Install dependencies
-cd react-native-scaling-drawer
+cd react-native-scalable-drawer
 npm install
 
 # Install example dependencies
@@ -136,7 +136,7 @@ Check the [`src/`](./src) directory for full implementation details.
 Simple and clean structure:
 
 ```
-react-native-scaling-drawer/
+react-native-scalable-drawer/
 ├── src/                    # 📦 Library source code
 ├── lib/                    # 📦 Compiled library
 ├── example/                # 📱 Example Expo app
@@ -194,7 +194,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## 🙏 Credits
 
-Created with ❤️ by [89viral1](https://github.com/89viral1)
+Created with ❤️ by [apachi1444](https://github.com/apachi1444)
 
 Inspired by modern mobile design patterns and built for the React Native community.
 
@@ -206,6 +206,6 @@ If this project helped you, please give it a ⭐️ on GitHub!
 
 <div align="center">
 
-**[📦 Source](./src) • [📱 Example](./example) • [🐛 Issues](https://github.com/89viral1/react-native-scaling-drawer/issues)**
+**[📦 Source](./src) • [📱 Example](./example) • [🐛 Issues](https://github.com/apachi1444/react-native-scalable-drawer/issues)**
 
 </div>

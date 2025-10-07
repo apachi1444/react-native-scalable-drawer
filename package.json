@@ -38,18 +38,18 @@
     "modern-navigation"
   ],
   "author": {
-    "name": "89viral1",
-    "url": "https://github.com/89viral1"
+    "name": "apachi1444",
+    "url": "https://github.com/apachi1444"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/89viral1/react-native-scaling-drawer.git"
+    "url": "https://github.com/apachi1444/react-native-scalable-drawer.git"
   },
   "bugs": {
-    "url": "https://github.com/89viral1/react-native-scaling-drawer/issues"
+    "url": "https://github.com/apachi1444/react-native-scalable-drawer/issues"
   },
-  "homepage": "https://github.com/89viral1/react-native-scaling-drawer#readme",
+  "homepage": "https://github.com/apachi1444/react-native-scalable-drawer#readme",
   "peerDependencies": {
     "expo": ">=50.0.0",
     "expo-router": ">=3.0.0",
