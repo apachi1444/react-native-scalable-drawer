@@ -1,21 +1,19 @@
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useDrawer } from '@apachi14444/react-native-scaling-drawer';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import {
-    Alert,
-    FlatList,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  FlatList,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDrawer } from 'react-native-scaling-drawer';
-
-// Import theme colors
-import { useThemeColors } from '../../hooks/useThemeColors';
 
 // Mock table data
 const mockTableData = {

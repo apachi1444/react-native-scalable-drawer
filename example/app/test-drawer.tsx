@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // Using the workspace package
-import { useDrawer } from 'react-native-scaling-drawer';
+import { useDrawer } from '@apachi14444/react-native-scaling-drawer';
 
 export default function TestDrawerScreen() {
   const { isOpen, open, close, toggle, enableGestures } = useDrawer();

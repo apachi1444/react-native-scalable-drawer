@@ -6,7 +6,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 // Demonstrating flexible drawer control!
-import { useDrawer } from 'react-native-scaling-drawer';
+import { useDrawer } from '@apachi14444/react-native-scaling-drawer';
 
 // Floating Action Button - shows how flexible the drawer control is!
 function FloatingMenuButton() {

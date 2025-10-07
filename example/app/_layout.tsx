@@ -7,7 +7,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '../hooks/useColorScheme';
 // Using the workspace package
-import { DrawerProvider, ScalingDrawer, useDrawer } from 'react-native-scaling-drawer';
+import { DrawerProvider, ScalingDrawer, useDrawer } from '@apachi14444/react-native-scaling-drawer';
 
 // App content that uses the drawer - must be inside provider
 function AppContent() {

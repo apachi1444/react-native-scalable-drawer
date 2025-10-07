@@ -1,19 +1,17 @@
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { useDrawer } from '@apachi14444/react-native-scaling-drawer';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    FlatList,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDrawer } from 'react-native-scaling-drawer';
-
-// Import theme colors
-const { useThemeColors } = require('../../hooks/useThemeColors');
 
 // Enhanced mock data with records for deep searching
 const allTables = [

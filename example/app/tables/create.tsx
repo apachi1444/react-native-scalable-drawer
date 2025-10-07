@@ -11,7 +11,7 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDrawer } from 'react-native-scaling-drawer';
+import { useDrawer } from '@apachi14444/react-native-scaling-drawer';
 
 const columnTypes = [
   { value: 'text', label: 'Text', icon: '📝' },
