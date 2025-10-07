@@ -1,6 +1,6 @@
 {
   "name": "@apachi14444/react-native-scaling-drawer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A beautiful, performant drawer navigation with scaling animations and shadow effects for Expo Router and React Native",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
