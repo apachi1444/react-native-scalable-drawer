@@ -1,0 +1,111 @@
+name: Publish to NPM
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (patch, minor, major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: package-template/package-lock.json
+          
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./package-template
+        
+      - name: Run TypeScript check
+        run: npm run typecheck
+        working-directory: ./package-template
+        
+      - name: Run linting
+        run: npm run lint
+        working-directory: ./package-template
+        
+      - name: Build package
+        run: npm run build
+        working-directory: ./package-template
+        
+      - name: Run tests
+        run: npm test
+        working-directory: ./package-template
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: package-template/package-lock.json
+          
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./package-template
+        
+      - name: Build package
+        run: npm run build
+        working-directory: ./package-template
+        
+      - name: Update version (manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          npm version ${{ github.event.inputs.version }}
+          git push
+          git push --tags
+        working-directory: ./package-template
+        
+      - name: Publish to NPM
+        run: npm publish
+        working-directory: ./package-template
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
+      - name: Create GitHub Release (manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.new_version }}
+          release_name: Release v${{ steps.version.outputs.new_version }}
+          body: |
+            ## Changes
+            - Automated release via GitHub Actions
+            
+            ## Installation
+            ```bash
+            npm install react-native-scaling-drawer@${{ steps.version.outputs.new_version }}
+            ```
+          draft: false
+          prerelease: false

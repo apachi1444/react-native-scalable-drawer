@@ -1,49 +1,109 @@
 {
-  "name": "rn-scalable-drawer",
-  "main": "expo-router/entry",
+  "name": "@apachi14444/react-native-scaling-drawer",
   "version": "1.0.0",
+  "description": "A beautiful, performant drawer navigation with scaling animations and shadow effects for Expo Router and React Native",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "lint": "expo lint"
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build && npm run typecheck",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit",
+    "example": "cd example && npm start",
+    "docs": "typedoc src/index.ts",
+    "clean": "rm -rf lib",
+    "dev": "npm run build:watch",
+    "pack:test": "npm pack && tar -tf *.tgz"
+  },
+  "keywords": [
+    "react-native",
+    "expo-router",
+    "expo",
+    "drawer",
+    "navigation",
+    "animation",
+    "scaling",
+    "sidebar",
+    "menu",
+    "mobile",
+    "ui",
+    "component",
+    "typescript",
+    "modern-navigation"
+  ],
+  "author": {
+    "name": "89viral1",
+    "url": "https://github.com/89viral1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/89viral1/react-native-scaling-drawer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/89viral1/react-native-scaling-drawer/issues"
+  },
+  "homepage": "https://github.com/89viral1/react-native-scaling-drawer#readme",
+  "peerDependencies": {
+    "expo": ">=50.0.0",
+    "expo-router": ">=3.0.0",
+    "react": ">=18.0.0",
+    "react-native": ">=0.70.0"
   },
   "dependencies": {
-    "@expo/vector-icons": "^14.1.0",
-    "@react-navigation/bottom-tabs": "^7.3.10",
-    "@react-navigation/elements": "^2.3.8",
-    "@react-navigation/native": "^7.1.6",
-    "expo": "~53.0.9",
-    "expo-blur": "~14.1.4",
-    "expo-constants": "~17.1.6",
-    "expo-font": "~13.3.1",
-    "expo-haptics": "~14.1.4",
-    "expo-image": "~2.1.7",
-    "expo-linking": "~7.1.5",
-    "expo-router": "~5.0.7",
-    "expo-splash-screen": "~0.30.8",
-    "expo-status-bar": "~2.2.3",
-    "expo-symbols": "~0.4.4",
-    "expo-system-ui": "~5.0.7",
-    "expo-web-browser": "~14.1.6",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-native": "0.79.2",
-    "react-native-gesture-handler": "~2.24.0",
-    "react-native-reanimated": "~3.17.4",
-    "react-native-safe-area-context": "5.4.0",
-    "react-native-screens": "~4.11.1",
-    "react-native-web": "~0.20.0",
-    "react-native-webview": "13.13.5"
+    "react-native-gesture-handler": ">=2.0.0",
+    "react-native-reanimated": ">=3.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@types/react": "~19.0.10",
-    "typescript": "~5.8.3",
-    "eslint": "^9.25.0",
-    "eslint-config-expo": "~9.2.0"
+    "@eslint/eslintrc": "^3.3.1",
+    "@react-native-community/eslint-config": "^3.2.0",
+    "@types/react": "^18.0.0",
+    "@types/react-native": "^0.72.0",
+    "eslint": "^9.37.0",
+    "expo": "~50.0.0",
+    "expo-router": "~3.4.0",
+    "typescript": "^5.0.0"
   },
-  "private": true
+  "files": [
+    "lib",
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/types/**/*"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
+  },
+  "eslintConfig": {
+    "extends": "@react-native-community",
+    "rules": {
+      "prettier/prettier": "off"
+    }
+  }
 }

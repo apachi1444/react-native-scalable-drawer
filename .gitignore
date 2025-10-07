@@ -2,6 +2,12 @@
 
 # dependencies
 node_modules/
+*/node_modules/
+
+# Package build output
+lib/
+dist/
+*.tgz
 
 # Expo
 .expo/
@@ -35,5 +41,25 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs
+*.log
+
+# Coverage
+coverage/
+
+# Temporary files
+tmp/
+temp/
+
+# Old structure (cleaned up)
+package-template/
+apps/
+packages/
 
 app-example
